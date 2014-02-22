@@ -29,7 +29,7 @@ function Map:draw()
   for y=1, self.displaySizeY do
       for x=1, self.displaySizeX do                                                         
         
-        local tileId = self.mapData[x+self.displayOffsetX][y+self.displayOffsetY]
+        local tileId = self.mapData[y+self.displayOffsetY][x+self.displayOffsetX]
         local tileSprite = self.tiles[tileId]
         
         love.graphics.draw( 
@@ -71,8 +71,8 @@ function Map:getMapCoordFromMouseCoord(mx, my)
   mx = math.floor(mx / (screenSizeX / self.displaySizeX))
   my = math.floor(my / (screenSizeY / self.displaySizeY))
   
-  mx = mx - self.displayOffsetX
-  my = my - self.displayOffsetY
+  mx = mx + self.displayOffsetX + 1
+  my = my + self.displayOffsetY + 1
   return { x = mx, y = my }
 end
 

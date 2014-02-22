@@ -34,18 +34,18 @@ function calcDirToTarget(from, to, map)
   for y=1, map.sizeY do
     table.insert(lenArr, { })
     for x=1, map.sizeX do
-      table.insert(lenArr[y], 999999) --infinity for practical purpose
+      table.insert(lenArr[y], 9999) --infinity for practical purpose
     end
   end
   
   function BFS(x,y,l)
     function verifyAndRun(nx, ny, l)
       if 
-          lenArr[nx][ny] > (l+1) 
+          lenArr[ny][nx] > (l+1) 
         and
           map.mapData[ny][nx] == 0  --empty tile
       then
-        lenArr[nx][ny] = l+1
+        lenArr[ny][nx] = l+1
         BFS(nx, ny, l+1)
       end 
     end
@@ -68,21 +68,21 @@ function calcDirToTarget(from, to, map)
     end
   end
   
-  lenArr[to.x][to.y] = 0
+  lenArr[to.y][to.x] = 0
   -- calculate path lenghts
   BFS(to.x, to.y, 0)
   
   -- create table [(len, dir)]
   local L = {
-    lenArr[from.x][from.y-1],
-    lenArr[from.x+1][from.y],
-    lenArr[from.x][from.y+1],
-    lenArr[from.x-1][from.y]
+    (from.y >= 2) and lenArr[from.y-1][from.x] or 9999,
+    (from.x < map.sizeX) and lenArr[from.y][from.x+1] or 9999,
+    (from.y < map.sizeY) and lenArr[from.y+1][from.x] or 9999,
+    (from.x >= 2) and lenArr[from.y][from.x-1] or 9999
   }
   
   -- find the direction with the shortest path lenght
   local bestD = nil
-  local bestL = 999999
+  local bestL = 9999
   for dir=1,4 do
     if bestL > L[dir] then
       bestL = L[dir]
@@ -114,14 +114,18 @@ end
 function Prisoner:draw()
   local ds = map:getTileDrawScale()
   
-  local dx = map.tileSizeX * (prisoner.x - map.displayOffsetX)
-  local dy = map.tileSizeY * (prisoner.y - map.displayOffsetY)
+  local dx = map.tileSizeX * (prisoner.x - map.displayOffsetX - 1)
+  local dy = map.tileSizeY * (prisoner.y - map.displayOffsetY - 1)
   love.graphics.draw(prisonerSprite, dx, dy, 0, ds.x, ds.y)
 end
 
 function Prisoner:update()
   local direction
   if self.target then
+    if self.x == self.target.x and self.y == self.target.y then
+      return
+    end
+    
     direction = calcDirToTarget(self, self.target, map)
   else
     direction = pickRandomDirection()
