@@ -4,7 +4,7 @@ Prison = { }
 Prisoner = { }
 
 function Prisoner:new(x, y)
-  p = { }
+  local p = { }
   setmetatable(p, {__index = Prisoner})
   p.x = x
   p.y = y
@@ -114,9 +114,9 @@ end
 function Prisoner:draw()
   local ds = map:getTileDrawScale()
   
-  local dx = map.tileSizeX * (prisoner.x - map.displayOffsetX - 1)
-  local dy = map.tileSizeY * (prisoner.y - map.displayOffsetY - 1)
-  love.graphics.draw(prisonerSprite, dx, dy, 0, ds.x, ds.y)
+  local dx = map.tileSizeX * (self.x - map.displayOffsetX - 1)
+  local dy = map.tileSizeY * (self.y - map.displayOffsetY - 1)
+  love.graphics.draw(self.sprite, dx, dy, 0, ds.x, ds.y)
 end
 
 function Prisoner:update()
@@ -137,3 +137,29 @@ function Prisoner:update()
   self.y = self.y + v.y
 end
 
+-- really sorry for that but I didn't make unit base class :<
+Guard = { }
+setmetatable(Guard, {__index = Prisoner})
+
+function Guard:new(x,y)
+  local g = { }
+  g.x = x
+  g.y = y
+  setmetatable(g, {__index = Guard})
+  return g
+end
+
+function Guard:update()
+  Prisoner.update(self)
+  
+  -- calculate distance to the player
+  local dx = self.x-prisoner.x
+  local dy = self.y-prisoner.y
+  local distance = math.sqrt(dx*dx + dy*dy)
+  
+  --if distance < 3 then
+    self.target = prisoner
+    self.target.x = prisoner.x
+    self.target.y = prisoner.y
+  --end
+end

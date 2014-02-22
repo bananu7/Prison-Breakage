@@ -12,8 +12,28 @@ function love.load(arg)
   map = Map
   map:load("assets/images/tiles/")
   
-  prisonerSprite = love.graphics.newImage("assets/images/prisoner.png")
+  Prisoner.sprite = love.graphics.newImage("assets/images/prisoner.png")
   prisoner = Prisoner:new(3, 3)
+  prisoner.target = prisoner
+  
+  Guard.sprite = love.graphics.newImage("assets/images/guard.png")
+  guards = { }
+  
+  function randomPosition()
+    local x = love.math.random(2, map.sizeX-1)
+    local y = love.math.random(2, map.sizeY-1)
+    
+    if map.mapData[y][x] ~= 0 then
+      return randomPosition()
+    else
+      return { x = x, y = y}
+    end
+  end
+  
+  for i=1, 10 do
+    local p = randomPosition()
+    table.insert(guards, Guard:new(p.x, p.y))
+  end
 end
 
 -- update and draw
@@ -25,6 +45,11 @@ end
 function love.draw()
   map:draw()
   prisoner:draw()
+  
+  for _,guard in ipairs(guards) do
+    guard:draw()
+  end
+  
   loveframes.draw()
 end
 
@@ -54,8 +79,12 @@ function love.keypressed(key, unicode)
     love.event.quit()
   end
   
-  if key == "p" then
+  if key == " " then
     prisoner:update()
+    
+    for _,guard in ipairs(guards) do
+      guard:update()
+    end
   end
 end
 
