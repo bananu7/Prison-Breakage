@@ -6,14 +6,14 @@ Map = {
   sizeX = 20,
   sizeY = 20,
   
-  displayOffsetX = 0, --those are in pixels
+  displayOffsetX = 0, --those are in tiles
   displayOffsetY = 0,
   
   
   -- with screen size of 1024x768 (woo indie)
   -- we get 32x24 tiles which is OK
-  displaySizeX = 8,--32,
-  displaySizeY = 6,--24,
+  displaySizeX = 12,--32,
+  displaySizeY = 8,--24,
 }
 Map.tileSizeX = screenSizeX / Map.displaySizeX
 Map.tileSizeY = screenSizeY / Map.displaySizeY
