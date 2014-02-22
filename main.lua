@@ -36,10 +36,13 @@ function love.load(arg)
   end
 end
 
+
 -- update and draw
 
 function love.update(dt)
   loveframes.update(dt)
+  
+  checkWinLoseConditions()
 end
 
 function love.draw()
@@ -123,4 +126,21 @@ end
 function love.keyreleased(key)
   -- Forward event to loveframes
   loveframes.keyreleased(key)
+end
+
+function checkWinLoseConditions()
+  if love.lost then
+    local lostFrame = loveframes.Create("frame")
+    lostFrame:SetName("You lost")
+    lostFrame:Center()
+    lostFrame:SetModal(true)
+    
+    local startOverButton = loveframes.Create("button", lostFrame)
+    startOverButton:SetSize(lostFrame:GetWidth() - 10, 30)
+    startOverButton:SetPos(5, 65)
+    startOverButton:SetText("Start over")
+    startOverButton.OnClick = function()
+      love.load({})
+    end
+  end
 end

@@ -194,4 +194,9 @@ function Guard:update()
     self.target.x = prisoner.x
     self.target.y = prisoner.y
   end
+  
+  -- so drunk
+  if distance == 0 then
+    love.lost = true
+  end
 end

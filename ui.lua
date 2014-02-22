@@ -98,7 +98,7 @@ function ui.showMenu()
   startOver:SetPos(5, 30)
   startOver:SetText("New game")
   startOver.OnClick = function()
-    -- TODO this
+    love.load({})
   end
   
   local quitButton = loveframes.Create("button", ui.menu)
