@@ -18,7 +18,6 @@ Map = {
 Map.tileSizeX = screenSizeX / Map.displaySizeX
 Map.tileSizeY = screenSizeY / Map.displaySizeY
 
-
 function Map:load(tilepath)
   self.tiles = {}
   for i=0,3 do
@@ -45,6 +44,13 @@ function Map:draw()
    end
 end
 
+function Map:getTileDrawScale()
+  return {
+    x = self.tileSizeX / self.tiles[1]:getWidth(),
+    y = self.tileSizeY / self.tiles[1]:getHeight() 
+  }
+end
+
 function Map:keypressed(key,_)
   if key == 'up' then
     self.displayOffsetY = math.max(self.displayOffsetY-1, 0)
@@ -59,6 +65,15 @@ function Map:keypressed(key,_)
   if key == 'right' then
     self.displayOffsetX = math.min(self.displayOffsetX+1, self.sizeX-self.displaySizeX)
   end
+end
+
+function Map:getMapCoordFromMouseCoord(mx, my)  
+  mx = math.floor(mx / (screenSizeX / self.displaySizeX))
+  my = math.floor(my / (screenSizeY / self.displaySizeY))
+  
+  mx = mx - self.displayOffsetX
+  my = my - self.displayOffsetY
+  return { x = mx, y = my }
 end
 
 Map.mapData={

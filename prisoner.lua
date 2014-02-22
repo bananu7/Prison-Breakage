@@ -25,7 +25,7 @@ end
 ]]
 
 function pickRandomDirection()
-  return math.random(1,4)
+  return love.math.random(1,4)
 end 
 
 function calcDirToTarget(from, to, map)
@@ -41,9 +41,9 @@ function calcDirToTarget(from, to, map)
   function BFS(x,y,l)
     function verifyAndRun(nx, ny, l)
       if 
-          lenArr[nx][ny] < (l+1) 
+          lenArr[nx][ny] > (l+1) 
         and
-          map.data[nx][ny] == 0  --empty tile
+          map.mapData[ny][nx] == 0  --empty tile
       then
         lenArr[nx][ny] = l+1
         BFS(nx, ny, l+1)
@@ -86,18 +86,50 @@ function calcDirToTarget(from, to, map)
   for dir=1,4 do
     if bestL > L[dir] then
       bestL = L[dir]
-      best = dir
+      bestD = dir
     end
+  end
+  
+  if bestD == nil then
+    error "No path available"
   end
   
   return bestD
 end
 
-function Prisoner:update()
-  if target then
-    local direction = calcDirToTarget(self, self.target, map)
+function directionToVector(dir)
+  if dir == 1 then
+    return { x = 0, y = -1 }
+  elseif dir == 2 then
+    return { x = 1, y = 0 }
+  elseif dir == 3 then
+    return { x = 0, y = 1 }
+  elseif dir == 4 then
+    return { x = -1, y = 0 }
   else
-    local direction = pickRandomDirection()
+    error "Major fuckup; direction bad"
   end
+end
+
+function Prisoner:draw()
+  local ds = map:getTileDrawScale()
+  
+  local dx = map.tileSizeX * (prisoner.x - map.displayOffsetX)
+  local dy = map.tileSizeY * (prisoner.y - map.displayOffsetY)
+  love.graphics.draw(prisonerSprite, dx, dy, 0, ds.x, ds.y)
+end
+
+function Prisoner:update()
+  local direction
+  if self.target then
+    direction = calcDirToTarget(self, self.target, map)
+  else
+    direction = pickRandomDirection()
+  end
+  
+  local v = directionToVector(direction)
+  
+  self.x = self.x + v.x
+  self.y = self.y + v.y
 end
 

@@ -1,4 +1,5 @@
 require"map"
+require"prisoner"
 
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
@@ -10,6 +11,9 @@ function love.load(arg)
   
   map = Map
   map:load("assets/images/tiles/")
+  
+  prisonerSprite = love.graphics.newImage("assets/images/prisoner.png")
+  prisoner = Prisoner:new(3, 3)
 end
 
 -- update and draw
@@ -20,6 +24,7 @@ end
 
 function love.draw()
   map:draw()
+  prisoner:draw()
   loveframes.draw()
 end
 
@@ -33,6 +38,9 @@ end
 function love.mousereleased(x, y, button)
   -- Forward event to loveframes
   loveframes.mousereleased(x, y, button)
+  
+  local mapCoord = map:getMapCoordFromMouseCoord(x,y)
+  prisoner.target = mapCoord
 end
 
 function love.keypressed(key, unicode)
@@ -44,6 +52,10 @@ function love.keypressed(key, unicode)
   
   if key == "escape" then
     love.event.quit()
+  end
+  
+  if key == "p" then
+    prisoner:update()
   end
 end
 
