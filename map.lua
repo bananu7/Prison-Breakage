@@ -89,6 +89,7 @@ function Map:generate()
   end
 
   function spawnDrunkard(x,y,steps)
+    self.mapData[x][y] = 0
     for i=1,steps do
       local dir = pickRandomDirection()
       local v = directionToVector(dir)
@@ -117,6 +118,9 @@ function Map:generate()
     
     spawnDrunkard(x,y,drunkardSteps)
   end
+  
+  -- try to fix player starting in separated room
+  spawnDrunkard(3,3,20)
 end
 --[[
 Map.mapData={
