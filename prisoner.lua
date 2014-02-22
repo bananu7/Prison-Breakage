@@ -180,6 +180,8 @@ function Guard:update()
     self.target = { }
     self.target.x = prisoner.x
     self.target.y = prisoner.y
+  else
+    self.target = nil
   end
   
   -- so drunk
