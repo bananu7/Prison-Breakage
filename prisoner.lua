@@ -28,6 +28,33 @@ function pickRandomDirection()
   return love.math.random(1,4)
 end 
 
+function pickRandomMovableDirection(position)
+  function directionOk(direction, position)
+    local v = directionToVector(direction)
+    local nx = position.x + v.x
+    local ny = position.y + v.y
+    
+    if 
+          ny > 0
+      and nx > 0
+      and ny <= map.sizeY
+      and nx <= map.sizeX
+      and map.mapData[ny][nx] == 0
+    then
+      return true
+    else
+      return false
+    end
+  end
+  
+  while true do
+    local direction = pickRandomDirection()
+    if directionOk(direction, position) then
+      return direction
+    end
+  end
+end
+
 function calcDirToTarget(from, to, map)
   -- create array filled with infinite length
   local lenArr = { }
@@ -91,7 +118,7 @@ function calcDirToTarget(from, to, map)
   end
   
   if bestD == nil then
-    error "No path available"
+  --  error "No path available"
   end
   
   return bestD
@@ -128,7 +155,11 @@ function Prisoner:update()
     
     direction = calcDirToTarget(self, self.target, map)
   else
-    direction = pickRandomDirection()
+    direction = pickRandomMovableDirection(self)
+  end
+  
+  if direction == nil then
+    return -- no path found
   end
   
   local v = directionToVector(direction)
@@ -157,9 +188,10 @@ function Guard:update()
   local dy = self.y-prisoner.y
   local distance = math.sqrt(dx*dx + dy*dy)
   
-  --if distance < 3 then
-    self.target = prisoner
+  if distance < 3 then
+    --self.target = prisoner -- that sets the target to permanent follow
+    self.target = { }
     self.target.x = prisoner.x
     self.target.y = prisoner.y
-  --end
+  end
 end

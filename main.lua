@@ -79,12 +79,44 @@ function love.keypressed(key, unicode)
     love.event.quit()
   end
   
-  if key == " " then
-    prisoner:update()
-    
+  function isMapEmpty(x,y)
+    return map.mapData[y][x] == 0
+  end
+  
+  function updateGuards()
     for _,guard in ipairs(guards) do
       guard:update()
     end
+  end
+  
+  if key == "w" then
+    if isMapEmpty(prisoner.x, prisoner.y-1) then
+      prisoner.y = prisoner.y - 1
+      updateGuards()
+    end
+  end
+  if key == "s" then
+    if isMapEmpty(prisoner.x, prisoner.y+1) then
+      prisoner.y = prisoner.y + 1
+      updateGuards()
+    end
+  end
+  if key == "a" then
+    if isMapEmpty(prisoner.x-1, prisoner.y) then
+      prisoner.x = prisoner.x - 1
+      updateGuards()
+    end
+  end
+  if key == "d" then
+    if isMapEmpty(prisoner.x+1, prisoner.y) then
+      prisoner.x = prisoner.x + 1
+      updateGuards()
+    end
+  end
+  
+  if key == " " then
+    prisoner:update()
+    updateGuards()
   end
 end
 
