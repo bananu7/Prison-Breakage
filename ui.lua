@@ -61,8 +61,9 @@ function ui.create()
   
   -- Toolbar info
   local info = loveframes.Create("text", ui.toolbar)
-  info:SetPos(10, 10)
+  info:SetPos(70, 10)
   info:SetText({{0, 0, 0, 255}, "<Time of day and other objectives to complete, blabla>"})
+  info:Center()
   
   -- Menu button
   ui.menuButton = loveframes.Create("button", ui.toolbar)
@@ -92,8 +93,17 @@ function ui.showMenu()
   ui.menu:SetModal(true)
   ui.menu:SetName("Menu")
   
+  local startOver = loveframes.Create("button", ui.menu)
+  startOver:SetSize(ui.menu:GetWidth() - 10, 30)
+  startOver:SetPos(5, 30)
+  startOver:SetText("New game")
+  startOver.OnClick = function()
+    -- TODO this
+  end
+  
   local quitButton = loveframes.Create("button", ui.menu)
-  quitButton:SetPos(5, 5)
+  quitButton:SetSize(ui.menu:GetWidth() - 10, 30)
+  quitButton:SetPos(5, 65)
   quitButton:SetText("Exit game")
   quitButton.OnClick = function()
     love.event.quit()
