@@ -62,7 +62,7 @@ function ui.create()
   -- Toolbar info
   local info = loveframes.Create("text", ui.toolbar)
   info:SetPos(70, 10)
-  info:SetText({{0, 0, 0, 255}, "<Time of day and other objectives to complete, blabla>"})
+  info:SetText({{0, 0, 0, 255}, "Escape the guards, you faggot!"})
   info:Center()
   
   -- Menu button

@@ -132,13 +132,12 @@ end
 function checkWinLoseConditions()
   if love.lost then
     local lostFrame = loveframes.Create("frame")
-    lostFrame:SetName("You lost")
+    lostFrame:SetSize(250, 100)
     lostFrame:Center()
     lostFrame:SetModal(true)
+    lostFrame:SetName("You lost")
     
     local startOverButton = loveframes.Create("button", lostFrame)
-    startOverButton:SetSize(lostFrame:GetWidth() - 10, 30)
-    startOverButton:SetPos(5, 65)
     startOverButton:SetText("Start over")
     startOverButton.OnClick = function()
       love.load({})
