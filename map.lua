@@ -1,4 +1,6 @@
 
+require"util"
+
 screenSizeX = 1024
 screenSizeY = 768
 
@@ -76,6 +78,47 @@ function Map:getMapCoordFromMouseCoord(mx, my)
   return { x = mx, y = my }
 end
 
+function Map:generate()
+  self.mapData = { }
+  
+  for y=1, map.sizeY do
+    table.insert(map.mapData, { })
+    for x=1, map.sizeX do
+      table.insert(map.mapData[y], math.random(1,3)) --infinity for practical purpose
+    end
+  end
+
+  function spawnDrunkard(x,y,steps)
+    for i=1,steps do
+      local dir = pickRandomDirection()
+      local v = directionToVector(dir)
+      
+      local nx = x + v.x
+      local ny = y + v.y
+      
+      if
+            ny > 0
+        and nx > 0
+        and ny <= map.sizeY
+        and nx <= map.sizeX
+      then
+        self.mapData[ny][nx] = 0
+        x = nx
+        y = ny
+      end
+    end
+  end
+
+  for i=1, 20 do
+    local drunkardSteps = 30
+    
+    x = love.math.random(2,map.sizeX-1)
+    y = love.math.random(2,map.sizeY-1)
+    
+    spawnDrunkard(x,y,drunkardSteps)
+  end
+end
+--[[
 Map.mapData={
    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
    { 0, 1, 0, 0, 2, 2, 2, 0, 3, 0, 3, 0, 1, 1, 1, 0, 0, 0, 0, 0},
@@ -98,3 +141,4 @@ Map.mapData={
    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 }
+]]

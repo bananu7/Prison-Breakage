@@ -11,6 +11,7 @@ function love.load(arg)
   
   map = Map
   map:load("assets/images/tiles/")
+  map:generate()
   
   Prisoner.sprite = love.graphics.newImage("assets/images/prisoner.png")
   prisoner = Prisoner:new(3, 3)
